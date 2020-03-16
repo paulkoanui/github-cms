@@ -99,7 +99,7 @@ jobs:
           action: "PUBLISH"
           collection: "pages"
       - uses: paulkoanui/github-cms-action@v1.0
-        name: Archive Projects
+        name: Archive Pages
         if: |
           github.event.project_card && github.event.project_card.content_url
           && (github.event.action == 'moved' || github.event.action == 'converted')
@@ -108,7 +108,7 @@ jobs:
           action: "ARCHIVE"
           collection: "pages"
       - uses: paulkoanui/github-cms-action@v1.0
-        name: Unpublish Projects
+        name: Unpublish Pages
         if: |
           github.event.project_card && github.event.project_card.content_url
           && github.event.action == 'deleted'
