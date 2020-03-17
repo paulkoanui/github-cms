@@ -27,6 +27,8 @@ env:
   PROJECTS_ARCHIVE_COLUMN: 8321610
   PAGES_PUBLISH_COLUMN: 8345925
   PAGES_ARCHIVE_COLUMN: 8345927
+  DOCS_PUBLISH_COLUMN: 8351888
+  DOCS_ARCHIVE_COLUMN: 8351890
 
 jobs:
   publishing:
@@ -116,3 +118,30 @@ jobs:
         with:
           action: "UNPUBLISH"
           collection: "pages"
+      - uses: paulkoanui/github-cms-action@master
+        name: Publish Docs
+        if: |
+          github.event.project_card && github.event.project_card.content_url
+          && (github.event.action == 'moved' || github.event.action == 'converted')
+          && (github.event.project_card.column_id == env.DOCS_PUBLISH_COLUMN)
+        with:
+          action: "PUBLISH"
+          collection: "documentation"
+      - uses: paulkoanui/github-cms-action@master
+        name: Archive Docs
+        if: |
+          github.event.project_card && github.event.project_card.content_url
+          && (github.event.action == 'moved' || github.event.action == 'converted')
+          && (github.event.project_card.column_id == env.DOCS_ARCHIVE_COLUMN)
+        with:
+          action: "ARCHIVE"
+          collection: "documentation"
+      - uses: paulkoanui/github-cms-action@master
+        name: Unpublish Docs
+        if: |
+          github.event.project_card && github.event.project_card.content_url
+          && github.event.action == 'deleted'
+          && ((github.event.project_card.column_id == env.DOCS_PUBLISH_COLUMN) || (github.event.project_card.column_id == env.DOCS_ARCHIVE_COLUMN))
+        with:
+          action: "UNPUBLISH"
+          collection: "documentation"
